@@ -1,6 +1,5 @@
 import unittest
-from unittest.mock import patch
-from src.task_manager import add_task, delete_task, filter_tasks_by_status, list_tasks
+from src.task_manager import add_task, delete_task, filter_tasks_by_status, update_overdue_tasks
 from src.file_handler import save_tasks, load_tasks
 from src.task import Task
 import os
@@ -112,13 +111,9 @@ class TestTaskManager(unittest.TestCase):
         """
         task = Task("Overdue Task", "Description", "01-01-2000", "pending")
         self.tasks.append(task)
+        update_overdue_tasks(self.tasks)
 
-        with patch("builtins.print") as mock_print:
-            list_tasks(self.tasks)
-
-        output = mock_print.call_args[0][0]
-
-        self.assertIn("Status: overdue", output)
+        self.assertEqual(task.status, "overdue")
  
 if __name__ == "__main__":
     unittest.main()
