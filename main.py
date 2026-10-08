@@ -4,8 +4,9 @@ from src.file_handler import load_tasks
 
 def main():
     tasks = load_tasks()
-    update_overdue_tasks(tasks)
     while True:
+        update_overdue_tasks(tasks)
+        
         print("\nTask Manager CLI")
         print("1. Add Task")
         print("2. Delete Task")

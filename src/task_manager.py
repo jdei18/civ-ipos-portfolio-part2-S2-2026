@@ -36,11 +36,11 @@ def add_task(tasks, title, description, due_date):
         .split()[0]
     )
 
-    #Prevent date with invalid format from being assigned to task
+    # Prevent date with invalid format from being assigned to task
     if len(date_first_section) == 4 and date_first_section.isdigit():
         print("Error: Invalid date format. Use day-month-year order.")
         return False
-    
+
     # Validate due date and format
     try:
         parsed_due_date = parser.parse(due_date, dayfirst=True)
@@ -52,7 +52,7 @@ def add_task(tasks, title, description, due_date):
     if parsed_due_date.date() < datetime.now().date():
         print("Error: A task with a due date in the past cannot be created.")
         return False
-    
+
     tasks.append(Task(title, description, due_date))
     save_tasks(tasks)
     return True
@@ -128,6 +128,7 @@ def filter_tasks_by_status(tasks, status):
     """
     return [task for task in tasks if task.status == status]
 
+
 def update_overdue_tasks(tasks):
     """
     Update pending tasks to overdue when their due date has passed.
@@ -142,9 +143,9 @@ def update_overdue_tasks(tasks):
 
     for task in tasks:
         parsed_due_date = parser.parse(task.due_date, dayfirst=True)
-        
-        if (task.status == "pending"
-            and parsed_due_date.date() < datetime.now().date()):
+
+        todays_date = datetime.now().date()
+        if (task.status == "pending" and parsed_due_date.date() < todays_date):
             task.status = "overdue"
             updated = True
 
