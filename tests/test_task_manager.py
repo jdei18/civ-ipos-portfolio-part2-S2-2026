@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from src.task_manager import add_task, delete_task, filter_tasks_by_status, update_overdue_tasks
 from src.file_handler import save_tasks, load_tasks
 from src.task import Task
@@ -100,10 +101,12 @@ class TestTaskManager(unittest.TestCase):
         Test adding a task with a due date that has already passed.
         Verify that the function rejects the task and returns False.
         """
-        result = add_task(self.tasks, "Past Task", "Description", "01-01-2000")
+        with patch("src.task_manager.save_tasks") as mock_save_tasks:
+            result = add_task(self.tasks, "Past Task", "Description", "01-01-2000")
 
         self.assertFalse(result)
         self.assertEqual(len(self.tasks), 0)
+        mock_save_tasks.assert_not_called()
 
     def test_overdue_task_status(self):
         """
@@ -111,9 +114,12 @@ class TestTaskManager(unittest.TestCase):
         """
         task = Task("Overdue Task", "Description", "01-01-2000", "pending")
         self.tasks.append(task)
-        update_overdue_tasks(self.tasks)
+
+        with patch("src.task_manager.save_tasks") as mock_save_tasks:
+            update_overdue_tasks(self.tasks)
 
         self.assertEqual(task.status, "overdue")
+        mock_save_tasks.assert_called_once_with(self.tasks)
  
 if __name__ == "__main__":
     unittest.main()
