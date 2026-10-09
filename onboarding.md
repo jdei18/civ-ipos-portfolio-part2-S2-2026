@@ -214,7 +214,7 @@ task-manager-cli/
 ## **19. FAQ**
 
 - **Q: How do I run tests?**  
-   A: Use the command `python -m unittest discover test`.
+   A: Use the command `python -m unittest discover tests`.
 
 - **Q: How do I install dependencies?**  
    A: Run `pip install -r requirements.txt`.

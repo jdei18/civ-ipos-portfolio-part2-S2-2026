@@ -5,7 +5,7 @@
 ## **Overview**
 
 This activity requires you to:
-
+  
 - Investigate and incorporate reusable components into an existing application.
 - Debug and improve the provided **Task Management CLI App**.
 - Use **GitHub Issues** for tracking bugs and improvements.
@@ -168,7 +168,7 @@ git push -u origin issue-<issue_number>
 3. Run tests to confirm that your new test cases fail:
 
 ```bash
-python -m unittest discover test
+python -m unittest discover tests
 ```
 
 ---
@@ -180,7 +180,7 @@ python -m unittest discover test
 3. Rerun the tests to ensure they pass:
 
 ```bash
-python -m unittest discover test
+python -m unittest discover tests
 ```
 
 ---
@@ -209,7 +209,7 @@ pip freeze > requirements.txt
 1. Run flake8 - from the root of the project (where .flake8 is located):
 
 ```bash
-python -m flake8 /src
+python -m flake8 src
 
 # Optional detailed report
 python -m flake8 . --statistics --show-source
@@ -293,3 +293,31 @@ When the PR is merged, the Issue will be automatically closed if you included "f
    - Answered knowledge questions with thoughtful insights.
 
 ---
+
+## New Dependencies
+
+### python-dateutil
+
+The application uses `python-dateutil` to parse task due dates.
+
+It is used to:
+- support day-month-year date formats
+- prevent tasks from being created with past due dates
+- update statuses of tasks to `overdue` when their due date has passed
+
+## Application Updates
+
+The Task Manager CLI has been updated to improve due date handling.
+
+The application can now:
+- Use `python-dateutil` to process task due dates.
+- Accept supported date formats in day-month-year order.
+- Reject new tasks with due dates that have already passed.
+- Check pending tasks for overdue due dates while the application is running.
+- Update overdue tasks from `pending` to `overdue`.
+
+## Updated Test Coverage
+
+Using mock & patch objects, additional unit tests were added to verify that:
+- Tasks with past due dates are rejected.
+- Overdue tasks have their status updated from `pending` to `overdue`.

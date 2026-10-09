@@ -12,7 +12,7 @@ def add_task(tasks, title, description, due_date):
         tasks (list): The list of existing Task objects.
         title (str): The title of the new task.
         description (str): A brief description of the task.
-        due_date (str): The due date of the task in 'DD-MM-YYYY' format.
+        due_date (str): The due date of the task in day-month-year order.
 
     Returns:
         bool: True if the task is added successfully, False otherwise.
@@ -131,13 +131,13 @@ def filter_tasks_by_status(tasks, status):
 
 def update_overdue_tasks(tasks):
     """
-    Update pending tasks to overdue when their due date has passed.
+    Update the status of 'pending' to 'overdue' when the task's due date has passed.
 
     Args:
         tasks (list): The list of existing Task objects.
 
     Returns:
-        bool: True if any task status was updated, otherwise False.
+        bool: True if any status was updated, otherwise False.
     """
     updated = False
 

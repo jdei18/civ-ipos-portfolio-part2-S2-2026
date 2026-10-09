@@ -6,7 +6,7 @@ def main():
     tasks = load_tasks()
     while True:
         update_overdue_tasks(tasks)
-        
+
         print("\nTask Manager CLI")
         print("1. Add Task")
         print("2. Delete Task")
