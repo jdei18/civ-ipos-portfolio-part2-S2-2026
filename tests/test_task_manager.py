@@ -1,4 +1,7 @@
 import unittest
+from unittest.mock import patch
+from click.testing import CliRunner
+from main import cli
 from src.task_manager import add_task, delete_task, filter_tasks_by_status
 from src.file_handler import save_tasks, load_tasks
 from src.task import Task
@@ -94,6 +97,64 @@ class TestTaskManager(unittest.TestCase):
         loaded_tasks = load_tasks()
         self.assertEqual(len(loaded_tasks), 1)
         self.assertEqual(loaded_tasks[0].title, "Persistent Task")
+
+    def test_add_cli_command(self):
+        """
+        Test that the Click add command passes task details to add_task.
+        """
+        runner = CliRunner()
+
+        with patch("main.load_tasks", return_value=self.tasks):
+            with patch("main.add_task") as mock_add_task:
+                result = runner.invoke(
+                    cli,
+                    [
+                        "add",
+                        "--title", "Test Task",
+                        "--description", "Description",
+                        "--due-date", "01-12-2027"
+                    ]
+                )
+
+        self.assertEqual(result.exit_code, 0)
+        mock_add_task.assert_called_once_with(
+            self.tasks,
+            "Test Task",
+            "Description",
+            "01-12-2027"
+        )
+
+    def test_delete_cli_command(self):
+        """
+        Test that the Click delete command passes the task title to delete_task.
+        """
+        runner = CliRunner()
+
+        with patch("main.load_tasks", return_value=self.tasks):
+            with patch("main.delete_task") as mock_delete_task:
+                result = runner.invoke(
+                    cli,
+                    [
+                        "delete",
+                        "--title", "Test Task"
+                    ]
+                )
+
+        self.assertEqual(result.exit_code, 0)
+        mock_delete_task.assert_called_once_with(self.tasks, "Test Task")
+
+    def test_list_cli_command(self):
+        """
+        Test that the Click list command passes the task title to list_tasks.
+        """
+        runner = CliRunner()
+
+        with patch("main.load_tasks", return_value=self.tasks):
+            with patch("main.list_tasks") as mock_list_tasks:
+                result = runner.invoke(cli, ["list"])
+
+        self.assertEqual(result.exit_code, 0)
+        mock_list_tasks.assert_called_once_with(self.tasks)
 
 
 if __name__ == "__main__":
