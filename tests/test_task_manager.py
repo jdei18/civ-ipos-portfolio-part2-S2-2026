@@ -156,6 +156,27 @@ class TestTaskManager(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_list_tasks.assert_called_once_with(self.tasks)
 
+    def test_list_cli_command_with_status(self):
+        """
+        Test that the Click list command can filter tasks by status.
+        """
+        runner = CliRunner()
+
+        with patch("main.load_tasks", return_value=self.tasks):
+            with patch("main.filter_tasks_by_status", return_value=[]) as mock_filter:
+                with patch("main.list_tasks") as mock_list_tasks:
+                    result = runner.invoke(
+                        cli,
+                        [
+                            "list",
+                            "--status", "completed"
+                        ]
+                    )
+
+        self.assertEqual(result.exit_code, 0)
+        mock_filter.assert_called_once_with(self.tasks, "completed")
+        mock_list_tasks.assert_called_once_with([])
+
 
 if __name__ == "__main__":
     unittest.main()
