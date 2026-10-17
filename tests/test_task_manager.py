@@ -150,7 +150,7 @@ class TestTaskManager(unittest.TestCase):
 
     def test_list_cli_command(self):
         """
-        Test that the Click list command passes the task title to list_tasks.
+        Test that the Click list command invokes list_tasks.
         """
         runner = CliRunner()
 

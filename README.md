@@ -209,11 +209,7 @@ pip freeze > requirements.txt
 1. Run flake8 - from the root of the project (where .flake8 is located):
 
 ```bash
-<<<<<<< Updated upstream
-python -m flake8 src
-=======
 python -m flake8 src tests main.py
->>>>>>> Stashed changes
 
 # Optional detailed report
 python -m flake8 . --statistics --show-source
@@ -305,9 +301,9 @@ When the PR is merged, the Issue will be automatically closed if you included "f
 The application uses `python-dateutil` to parse task due dates.
 
 It is used to:
-- support day-month-year date formats
-- prevent tasks from being created with past due dates
-- update statuses of tasks to `overdue` when their due date has passed
+- support day-month-year date formats.
+- prevent tasks from being created with past due dates.
+- update statuses of tasks to `overdue` when their due date has passed.
 
 ## Application Updates
 
