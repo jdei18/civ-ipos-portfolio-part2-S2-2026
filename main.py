@@ -1,38 +1,93 @@
-from src.task_manager import add_task, delete_task, list_tasks, update_overdue_tasks
+import click
+from src.task_manager import (
+    add_task,
+    delete_task,
+    list_tasks,
+    update_overdue_tasks,
+    filter_tasks_by_status
+)
 from src.file_handler import load_tasks
 
 
-def main():
+@click.group()
+def cli():
+    """
+    Task Manager CLI.
+
+    Commands:
+
+    add
+        Add a new task.
+
+        --title
+            The name of the task.
+
+        --description
+            A description of the task. (optional)
+
+        --due-date
+            The task due date (day-month-year).
+
+    delete
+        Delete an existing task using its title.
+
+        --title
+            The title of the task to delete.
+
+    list
+        Display saved tasks.
+
+        --status
+            Optionally filter tasks by status.
+
+    PowerShell shortcut:
+
+        function tm { python main.py @args }
+
+    This allows commands such as:
+
+        tm list
+        tm add --title "Task" --due-date "08-07-2027"
+    """
+    pass
+
+
+@cli.command()
+@click.option("--title", required=True)
+@click.option("--description", default="")
+@click.option("--due-date", required=True)
+def add(title, description, due_date):
+    """Add a new task."""
     tasks = load_tasks()
-    while True:
-        update_overdue_tasks(tasks)
+    update_overdue_tasks(tasks)
+    add_task(tasks, title, description, due_date)
 
-        print("\nTask Manager CLI")
-        print("1. Add Task")
-        print("2. Delete Task")
-        print("3. List Tasks")
-        print("4. Exit")
 
-        choice = input("Enter your choice: ")
-        if choice == "1":
-            title = input("Title: ")
-            description = input("Description: ")
-            due_date = input("Due Date (day-month-year): ")
-            add_task(tasks, title, description, due_date)
-        elif choice == "2":
-            title = input("Title of the task to delete: ")
-            if delete_task(tasks, title):
-                print("Task deleted successfully.")
-            else:
-                print("Task not found.")
-        elif choice == "3":
-            list_tasks(tasks)
-        elif choice == "4":
-            print("Exiting Task Manager.")
-            break
-        else:
-            print("Invalid choice. Try again.")
+@cli.command()
+@click.option("--title", required=True)
+def delete(title):
+    """Delete a task."""
+    tasks = load_tasks()
+    update_overdue_tasks(tasks)
+
+    if delete_task(tasks, title):
+        click.echo("Task deleted successfully.")
+    else:
+        click.echo("Task not found.")
+
+
+@cli.command()
+@click.option("--status", required=False)
+def list(status):
+    """List tasks, optionally filtered by status."""
+    tasks = load_tasks()
+    update_overdue_tasks(tasks)
+
+    if status:
+        tasks = filter_tasks_by_status(tasks, status)
+
+    list_tasks(tasks)
 
 
 if __name__ == "__main__":
-    main()
+    cli()

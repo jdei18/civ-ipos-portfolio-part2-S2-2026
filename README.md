@@ -209,7 +209,11 @@ pip freeze > requirements.txt
 1. Run flake8 - from the root of the project (where .flake8 is located):
 
 ```bash
+<<<<<<< Updated upstream
 python -m flake8 src
+=======
+python -m flake8 src tests main.py
+>>>>>>> Stashed changes
 
 # Optional detailed report
 python -m flake8 . --statistics --show-source
@@ -321,3 +325,31 @@ The application can now:
 Using mock & patch objects, additional unit tests were added to verify that:
 - Tasks with past due dates are rejected.
 - Overdue tasks have their status updated from `pending` to `overdue`.
+
+### click
+
+The application uses `click` to enhance task commands
+
+It is used to:
+- Create a customised CLI.
+- Includes the pre-existing filter_tatas_by_status function.
+- Give an in-depth help message.
+
+## Application Updates
+
+The Task Manager CLI now uses click CLI commnads to add, delete and display tasks
+
+The application can now:
+- Use `click` to handle user inputs. 
+- Filter tasks by status.
+- Allow empty descriptions.
+- Provide an in-depth help message.
+
+## Updated Test Coverage
+
+Using mock & patch objects, additional unit tests were added to verify that:
+- The Click add command passes task details to add_task.
+- The Click delete command passes the task title to delete_task.
+- The Click list command passes the task title to list_tasks.
+- The Click list command can filter tasks by status.
+
