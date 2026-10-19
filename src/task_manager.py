@@ -1,7 +1,6 @@
 from src.task import Task
 from src.file_handler import save_tasks
 from datetime import datetime
-from dateutil import parser
 
 
 def add_task(tasks, title, description, due_date):
@@ -12,7 +11,7 @@ def add_task(tasks, title, description, due_date):
         tasks (list): The list of existing Task objects.
         title (str): The title of the new task.
         description (str): A brief description of the task.
-        due_date (str): The due date of the task in day-month-year order.
+        due_date (str): The due date of the task in 'DD-MM-YYYY' format.
 
     Returns:
         bool: True if the task is added successfully, False otherwise.
@@ -28,29 +27,11 @@ def add_task(tasks, title, description, due_date):
         print("Error: A task with this title already exists.")
         return False
 
-    date_first_section = (
-        due_date.strip()
-        .replace("-", " ")
-        .replace("/", " ")
-        .replace(".", " ")
-        .split()[0]
-    )
-
-    # Prevent date with invalid format from being assigned to task
-    if len(date_first_section) == 4 and date_first_section.isdigit():
-        print("Error: Invalid date format. Use day-month-year order.")
-        return False
-
-    # Validate due date and format
+    # Validate due date format
     try:
-        parsed_due_date = parser.parse(due_date, dayfirst=True)
+        datetime.strptime(due_date, "%d-%m-%Y")
     except ValueError:
-        print("Error: Invalid date format. Use day-month-year order.")
-        return False
-
-    # Prevent past due date from being assigned to task
-    if parsed_due_date.date() < datetime.now().date():
-        print("Error: A task with a due date in the past cannot be created.")
+        print("Error: Invalid date format. Use DD-MM-YYYY.")
         return False
 
     tasks.append(Task(title, description, due_date))
@@ -127,29 +108,3 @@ def filter_tasks_by_status(tasks, status):
         list: A list of Task objects that match the specified status.
     """
     return [task for task in tasks if task.status == status]
-
-
-def update_overdue_tasks(tasks):
-    """
-    Update the status of 'pending' to 'overdue' when the task's due date has passed.
-
-    Args:
-        tasks (list): The list of existing Task objects.
-
-    Returns:
-        bool: True if any status was updated, otherwise False.
-    """
-    updated = False
-
-    for task in tasks:
-        parsed_due_date = parser.parse(task.due_date, dayfirst=True)
-
-        todays_date = datetime.now().date()
-        if (task.status == "pending" and parsed_due_date.date() < todays_date):
-            task.status = "overdue"
-            updated = True
-
-    if updated:
-        save_tasks(tasks)
-
-    return updated

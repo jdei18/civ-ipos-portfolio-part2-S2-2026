@@ -1,12 +1,10 @@
-from src.task_manager import add_task, delete_task, list_tasks, update_overdue_tasks
+from src.task_manager import add_task, delete_task, list_tasks
 from src.file_handler import load_tasks
 
 
 def main():
     tasks = load_tasks()
     while True:
-        update_overdue_tasks(tasks)
-
         print("\nTask Manager CLI")
         print("1. Add Task")
         print("2. Delete Task")
@@ -17,7 +15,7 @@ def main():
         if choice == "1":
             title = input("Title: ")
             description = input("Description: ")
-            due_date = input("Due Date (day-month-year): ")
+            due_date = input("Due Date (DD-MM-YYYY): ")
             add_task(tasks, title, description, due_date)
         elif choice == "2":
             title = input("Title of the task to delete: ")
