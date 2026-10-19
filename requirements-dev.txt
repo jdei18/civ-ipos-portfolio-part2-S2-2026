@@ -6,4 +6,3 @@ flake8-import-order
 flake8-docstrings
 flake8-print
 pydocstyle
-python-dateutil>=2.8
