@@ -5,7 +5,6 @@ name: Portfolio Part 2 Workflow
 
 on:
   push:
-    branches: ["main"]
   pull_request:
     branches: ["main"]
 
